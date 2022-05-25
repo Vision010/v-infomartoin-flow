@@ -1,21 +1,24 @@
 import config from '@config/configuration';
+import { StatusMonitorConfiguration } from 'nestjs-status-monitor';
 
-export default {
-  title: 'NestJS Status', // Default title
+console.log(config().port, 'config().port');
+
+const monitorConfig = {
+  title: 'NestJS Status',
   path: '/status',
-  socketPath: '/socket.io', // In case you use a custom path
-  port: config().port, // Defaults to NestJS port
+  socketPath: '/socket.io',
+  port: 8000,
   spans: [
     {
-      interval: 1, // Every second
+      interval: 1,
       retention: 60, // Keep 60 datapoints in memory
     },
     {
-      interval: 5, // Every 5 seconds
+      interval: 5,
       retention: 60,
     },
     {
-      interval: 15, // Every 15 seconds
+      interval: 15,
       retention: 60,
     },
   ],
@@ -29,6 +32,21 @@ export default {
     rps: true,
     statusCodes: true,
   },
-  ignoreStartsWith: ['/admin'], // paths to ignore for responseTime stats
-  healthChecks: [],
-};
+  ignoreStartsWith: ['/admin'],
+  healthChecks: [
+    {
+      protocol: 'http',
+      host: 'localhost',
+      path: '/health/alive',
+      port: 8000,
+    },
+    {
+      protocol: 'http',
+      host: 'localhost',
+      path: '/health/dead',
+      port: 8000,
+    },
+  ],
+} as unknown as StatusMonitorConfiguration;
+
+export default monitorConfig;

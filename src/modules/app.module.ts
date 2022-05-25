@@ -6,9 +6,9 @@ import monitorConfig from '@config/monitor';
 // import { HttpModule } from '@nestjs/axios';
 import { StatusMonitorModule } from 'nestjs-status-monitor';
 
-import { CatModule } from '@modules/cats/cat.module';
-
-import { ListModule } from './list/list.module';
+import { CatModule } from './cats/cat.module';
+import { HealthModule } from './health/health.module';
+import { JuejinModule } from './juejin/juejin.module';
 
 @Module({
   imports: [
@@ -16,8 +16,9 @@ import { ListModule } from './list/list.module';
     ConfigModule.forRoot({
       load: [config],
     }),
-    ListModule,
+    HealthModule,
     CatModule,
+    JuejinModule,
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -25,6 +26,7 @@ import { ListModule } from './list/list.module';
         const database = configService.get('database');
         return {
           uri: database.host,
+          // connectionName: 'myflow',
         };
       },
     }),

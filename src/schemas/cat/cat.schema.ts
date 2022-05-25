@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-@Schema()
+@Schema({ collection: 'cat', timestamps: true, autoCreate: true })
 export class Cat {
   @Prop()
   name: string;
